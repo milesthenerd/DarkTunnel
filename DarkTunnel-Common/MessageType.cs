@@ -5,16 +5,16 @@ namespace DarkTunnel.Common
         //HEARTBEAT is not used, ACKs do the job of keeping the UDP connection alive
         HEARTBEAT = 0,
         DISCONNECT = 1,
-        NEW_CONNECTION_REQUEST = 10,
-        NEW_CONNECTION_REPLY = 11,
-        PING_REQUEST = 20,
-        PING_REPLY = 21,
+        NEWCONNECTIONREQUEST = 10,
+        NEWCONNECTIONREPLY = 11,
+        PINGREQUEST = 20,
+        PINGREPLY = 21,
         DATA = 30,
         ACK = 31,
-        MASTER_SERVER_INFO_REQUEST = 100,
-        MASTER_SERVER_INFO_REPLY = 101,
-        MASTER_SERVER_PUBLISH_REQUEST = 110,
-        MASTER_SERVER_PUBLISH_REPLY = 111,
-        MASTER_PRINT_CONSOLE = 120,
+        MASTERSERVERINFOREQUST = 100,
+        MASTERSERVERINFOREPLY = 101,
+        MASTERSERVERPUBLISHREQUEST = 110,
+        MASTERSERVERPUBLISHREPLY = 111,
+        MASTER_PRINT_CONSOLE = 120
     }
 }

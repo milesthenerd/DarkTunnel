@@ -30,7 +30,7 @@ namespace DarkTunnel
 
         public bool Load(StreamReader sr)
         {
-            string currentLine = null;
+            string currentLine;
             while ((currentLine = sr.ReadLine()) != null)
             {
                 int splitIndex = currentLine.IndexOf("=");
@@ -83,14 +83,7 @@ namespace DarkTunnel
         public void Save(StreamWriter sw)
         {
             sw.WriteLine("#mode: Set to server if you want to host a local server over UDP, client if you want to connect to a server over UDP");
-            if (isServer)
-            {
-                sw.WriteLine("mode=server");
-            }
-            else
-            {
-                sw.WriteLine("mode=client");
-            }
+            sw.WriteLine(isServer ? "mode=server" : "mode=client");
             sw.WriteLine();
             sw.WriteLine("#endpoint, servers: The TCP server to connect to for forwarding over UDP. Client: The UDP server to connect to (not used when masterServerID is set)");
             sw.WriteLine($"endpoint={endpoint}");

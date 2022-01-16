@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace DarkTunnel
 {
-    class Program
+    static class Program
     {
         public static void Main(string[] args)
         {
@@ -54,7 +54,7 @@ namespace DarkTunnel
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                int SIO_UDP_CONNRESET = -1744830452;
+                const int SIO_UDP_CONNRESET = -1744830452;
                 udpClient.Client.IOControl((IOControlCode)SIO_UDP_CONNRESET, new byte[] { 0, 0, 0, 0 }, null);
             }
 
@@ -74,20 +74,11 @@ namespace DarkTunnel
             {
                 Console.WriteLine($"Server forwarding {options.endpoints[0]} to UDP port {options.localPort}");
                 if (options.masterServerID != 0)
-                {
                     Console.WriteLine($"Server registering with master ID {options.masterServerID}");
-                }
             }
             else
             {
-                if (options.masterServerID != 0)
-                {
-                    Console.WriteLine($"Client forwarding TCP port {options.localPort} to UDP server {options.masterServerID}");
-                }
-                else
-                {
-                    Console.WriteLine($"Client forwarding TCP port {options.localPort} to UDP server {options.endpoints[0]}");
-                }
+                Console.WriteLine($"Client forwarding TCP port {options.localPort} to UDP server {(options.masterServerID != 0 ? options.masterServerID : options.endpoints[0])}");
             }
 
             Console.WriteLine("Press q or ctrl+c to quit.");
@@ -102,9 +93,7 @@ namespace DarkTunnel
                     {
                         ConsoleKeyInfo cki = Console.ReadKey(false);
                         if (cki.KeyChar == 'q')
-                        {
                             running = false;
-                        }
                     }
                     catch (InvalidOperationException)
                     {

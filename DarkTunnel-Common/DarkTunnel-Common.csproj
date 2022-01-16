@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <RollForward>LatestMajor</RollForward>
     <RootNamespace>DarkTunnel.Common</RootNamespace>
   </PropertyGroup>
 

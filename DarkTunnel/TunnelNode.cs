@@ -2,6 +2,7 @@ using DarkTunnel.Common;
 using DarkTunnel.Common.Messages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -10,6 +11,7 @@ namespace DarkTunnel
 {
     public class TunnelNode
     {
+        //TODO: currently nothing ever sets this to false
         private bool running = true;
         private Random random = new Random();
         private Thread mainLoop;
@@ -40,16 +42,14 @@ namespace DarkTunnel
                 SetupUDPSocket(0);
             }
             connection = new UdpConnection(udp, ReceiveCallback);
-            mainLoop = new Thread(new ThreadStart(MainLoop)) { Name = "TunnelNode-MainLoop" };
+            mainLoop = new Thread(MainLoop) { Name = "TunnelNode-MainLoop" };
             mainLoop.Start();
         }
 
         public void Stop()
         {
             connection.Stop();
-            if (tcpServer != null)
-                tcpServer.Stop();
-            
+            tcpServer?.Stop();
             udp.Close();
         }
 
@@ -73,10 +73,8 @@ namespace DarkTunnel
             {
                 long currentTime = DateTime.UtcNow.Ticks;
 
-                foreach (var client in clients)
+                foreach (var client in clients.Where(client => !client.connected))
                 {
-                    if (client.connected) continue;
-
                     if (clientMapping.ContainsKey(client.id))
                     {
                         MediationClient.Remove(clientMapping[client.id].localTCPEndpoint);
@@ -145,9 +143,9 @@ namespace DarkTunnel
 
         private void ReceiveCallback(IMessage message, IPEndPoint endpoint)
         {
-            if (message is INodeMessage)
+            if (message is INodeMessage nodeMessage)
             {
-                int clientID = ((INodeMessage)message).GetID();
+                int clientID = nodeMessage.GetID();
                 if (clientMapping.ContainsKey(clientID))
                 {
                     Client client = clientMapping[clientID];
@@ -155,83 +153,91 @@ namespace DarkTunnel
                 }
             }
 
-            if (options.isServer && (message is NewConnectionRequest))
-            {
-                NewConnectionRequest nc = message as NewConnectionRequest;
-                NewConnectionReply ncr = new NewConnectionReply(nc.id, Header.PROTOCOL_VERSION, options.downloadSpeed);
-                //Do not connect protocol-incompatible clients.
-                if (nc.protocol_version != Header.PROTOCOL_VERSION) return;
-                
-                Client client = null;
-                if (!clientMapping.ContainsKey(ncr.id))
-                {
-                    TcpClient tcp = new TcpClient(AddressFamily.InterNetwork);
-                    try
-                    {
-                        tcp.Connect(options.endpoints[0]);
-                        client = new Client(options, nc.id, connection, tcp, connectionBucket);
-                        clients.Add(client);
-                        clientMapping.Add(client.id, client);
-                        MediationClient.Add(client.localTCPEndpoint);
-                        //add mapping for local tcp client and remote IP
-                    }
-                    catch
-                    {
-                        Disconnect dis = new Disconnect(nc.id, "TCP server is currently not running", $"end{client.localTCPEndpoint}");
-                        connection.Send(dis, endpoint);
-                        return;
-                    }
-                }
-                else
-                {
-                    client = clientMapping[nc.id];
-                }
-                //TODO: is this necessary down here?
-                ncr.ep = $"end{client.localTCPEndpoint}";
-                connection.Send(ncr, endpoint);
-                //Clamp to the clients download speed
-                Console.WriteLine($"Client {nc.id} download rate is {nc.downloadRate}KB/s");
-                if (nc.downloadRate < options.uploadSpeed)
-                {
-                    client.bucket.rateBytesPerSecond = nc.downloadRate * 1024;
-                    client.bucket.totalBytes = client.bucket.rateBytesPerSecond;
-                }
-                //Prefer IPv6
-                if (client.udpEndpoint == null || client.udpEndpoint.AddressFamily == AddressFamily.InterNetwork && endpoint.AddressFamily == AddressFamily.InterNetworkV6)
-                {
-                    Console.WriteLine($"Client endpoint {client.id} set to: {endpoint}");
-                    client.udpEndpoint = endpoint;
-                }
-            }
-            else if (!options.isServer && message is NewConnectionReply)
-            {
-                NewConnectionReply ncr = message as NewConnectionReply;
-                if (ncr.protocol_version != Header.PROTOCOL_VERSION)
-                {
-                    Console.WriteLine($"Unable to connect to incompatible server, our version: {Header.PROTOCOL_VERSION}, server: {ncr.protocol_version}");
-                    return;
-                }
-                if (clientMapping.ContainsKey(ncr.id))
-                {
-                    Client c = clientMapping[ncr.id];
-                    //Prefer IPv6
-                    if (c.udpEndpoint == null || c.udpEndpoint.AddressFamily == AddressFamily.InterNetwork && endpoint.AddressFamily == AddressFamily.InterNetworkV6)
-                    {
-                        Console.WriteLine($"Server endpoint {c.id} set to: {endpoint}");
-                        c.udpEndpoint = endpoint;
-                    }
-                    //Clamp to the servers download speed
-                    Console.WriteLine($"Servers download rate is {ncr.downloadRate}KB/s");
-                    if (ncr.downloadRate < options.uploadSpeed)
-                    {
-                        c.bucket.rateBytesPerSecond = ncr.downloadRate * 1024;
-                        c.bucket.totalBytes = c.bucket.rateBytesPerSecond;
-                    }
-                }
-            }
-
             switch(message)
             {
+                case NewConnectionRequest nc:
+                {
+                    if (!options.isServer) break;
+
+                    NewConnectionReply ncr = new NewConnectionReply(nc.id, Header.PROTOCOL_VERSION, options.downloadSpeed);
+                    //Do not connect protocol-incompatible clients.
+                    if (nc.protocol_version != Header.PROTOCOL_VERSION) return;
+
+                    Client client = null;
+                    if (!clientMapping.ContainsKey(ncr.id))
+                    {
+                        TcpClient tcp = new TcpClient(AddressFamily.InterNetwork);
+                        try
+                        {
+                            tcp.Connect(options.endpoints[0]);
+                            client = new Client(options, nc.id, connection, tcp, connectionBucket);
+                            clients.Add(client);
+                            clientMapping.Add(client.id, client);
+                            MediationClient.Add(client.localTCPEndpoint);
+                            //add mapping for local tcp client and remote IP
+                        }
+                        catch
+                        {
+                            //TODO do something about this
+                            Disconnect dis = new Disconnect(nc.id, "TCP server is currently not running", $"end{client.localTCPEndpoint}");
+                            connection.Send(dis, endpoint);
+                            return;
+                        }
+                    }
+                    else
+                        client = clientMapping[nc.id];
+
+                    //TODO: is this necessary down here?
+                    ncr.ep = $"end{client.localTCPEndpoint}";
+                    connection.Send(ncr, endpoint);
+                    //Clamp to the clients download speed
+                    Console.WriteLine($"Client {nc.id} download rate is {nc.downloadRate}KB/s");
+                    if (nc.downloadRate < options.uploadSpeed)
+                    {
+                        client.bucket.rateBytesPerSecond = nc.downloadRate * 1024;
+                        client.bucket.totalBytes = client.bucket.rateBytesPerSecond;
+                    }
+                    //Prefer IPv6
+                    //TODO: whats the order here?
+                    if (client.udpEndpoint == null || (client.udpEndpoint.AddressFamily == AddressFamily.InterNetwork) && (endpoint.AddressFamily == AddressFamily.InterNetworkV6))
+                    {
+                        Console.WriteLine($"Client endpoint {client.id} set to: {endpoint}");
+                        client.udpEndpoint = endpoint;
+                    }
+                    break;
+                }
+
+                case NewConnectionReply ncr:
+                {
+                    if (!options.isServer) break;
+
+                    if (ncr.protocol_version != Header.PROTOCOL_VERSION)
+                    {
+                        Console.WriteLine($"Unable to connect to incompatible server, our version: {Header.PROTOCOL_VERSION}, server: {ncr.protocol_version}");
+                        return;
+                    }
+
+                    if (clientMapping.ContainsKey(ncr.id))
+                    {
+                        Client c = clientMapping[ncr.id];
+                        //Prefer IPv6
+                        //TODO: whats the order hre
+                        if (c.udpEndpoint == null || c.udpEndpoint.AddressFamily == AddressFamily.InterNetwork && endpoint.AddressFamily == AddressFamily.InterNetworkV6)
+                        {
+                            Console.WriteLine($"Server endpoint {c.id} set to: {endpoint}");
+                            c.udpEndpoint = endpoint;
+                        }
+                        //Clamp to the servers download speed
+                        Console.WriteLine($"Servers download rate is {ncr.downloadRate}KB/s");
+                        if (ncr.downloadRate < options.uploadSpeed)
+                        {
+                            c.bucket.rateBytesPerSecond = ncr.downloadRate * 1024;
+                            c.bucket.totalBytes = c.bucket.rateBytesPerSecond;
+                        }
+                    }
+                    break;
+                }
+
                 case MasterServerInfoReply msir:
                 {
                     Client client = null;

@@ -30,12 +30,12 @@ namespace DarkTunnel
 
             if (futureData.Count <= 0) return null;
 
-            Data canditate = futureData.Values[0];
-            if (canditate.streamPos > currentRecvPos) return null;
+            Data candidate = futureData.Values[0];
+            if (candidate.streamPos > currentRecvPos) return null;
 
             //We have current data!
-            futureData.Remove(canditate.streamPos);
-            return canditate;
+            futureData.Remove(candidate.streamPos);
+            return candidate;
         }
 
         private void SetReceivePos(long currentRecvPos)

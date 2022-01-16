@@ -50,7 +50,7 @@ namespace DarkTunnel
             int rateBytesPerSecond = options.uploadSpeed * 1024;
             bucket = new TokenBucket(rateBytesPerSecond, rateBytesPerSecond, parentBucket);
 
-            clientThread = new Thread(new ThreadStart(Loop));
+            clientThread = new Thread(Loop);
             clientThread.Name = $"ClientThread-{id}";
             clientThread.Start();
         }
@@ -131,7 +131,7 @@ namespace DarkTunnel
 
             //If we don't have much data to send let's jump back to the unack'd position to send earlier than the RTT
             float dataToSend = txQueue.AvailableRead / (float)(bucket.rateBytesPerSecond);
-            if (dataToSend < 0.2f || latency < options.minRetransmitTime)
+            if (dataToSend < 0.2f || (latency < options.minRetransmitTime))
             {
                 if ((currentTime - lastWriteResetTime) > (options.minRetransmitTime * TimeSpan.TicksPerMillisecond))
                 {
@@ -174,6 +174,7 @@ namespace DarkTunnel
 
             //Send data
             Data d = new Data(id, currentSendPos, currentRecvPos, new byte[bytesToWrite], null);
+            //TODO: why not use the return value?
             txQueue.Read(d.tcpData, 0, currentSendPos, (int)bytesToWrite);
             //after d.tcpData has been written, convert to string, append localhost:port to end of payload, change back to bytes
             d.ep = $"end{localTCPEndpoint}";

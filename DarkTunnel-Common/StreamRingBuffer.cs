@@ -46,7 +46,7 @@ namespace DarkTunnel.Common
         {
             if (size > AvailableWrite)
             {
-                throw new ArgumentOutOfRangeException("Buffer full");
+                throw new ArgumentOutOfRangeException(nameof(size), "Buffer full");
             }
             //Because this is a ring buffer we have to "wrap around", so two writes.
 
@@ -66,20 +66,20 @@ namespace DarkTunnel.Common
             StreamWritePos += size;
         }
 
-        public int Read(byte[] dest, int offset, long ReadPos, int size)
+        public int Read(byte[] dest, int offset, long readPos, int size)
         {
-            long readDelta = ReadPos - StreamReadPos;
+            long readDelta = readPos - StreamReadPos;
             if (readDelta < 0 || AvailableRead - readDelta - size < 0)
             {
-                throw new ArgumentOutOfRangeException("Stream trying to read from a non-written area.");
+                throw new ArgumentOutOfRangeException(nameof(readDelta),"Stream trying to read from a non-written area.");
             }
-            int firstRead = internalBuffer.Length - (int)(ReadPos % internalBuffer.Length);
+            int firstRead = internalBuffer.Length - (int)(readPos % internalBuffer.Length);
             if (firstRead > size)
             {
                 firstRead = size;
             }
             int secondRead = size - firstRead;
-            Array.Copy(internalBuffer, ReadPos % internalBuffer.Length, dest, offset, firstRead);
+            Array.Copy(internalBuffer, readPos % internalBuffer.Length, dest, offset, firstRead);
             if (secondRead > 0)
             {
                 Array.Copy(internalBuffer, 0, dest, offset + firstRead, secondRead);
@@ -91,7 +91,7 @@ namespace DarkTunnel.Common
         {
             if (position < StreamReadPos)
             {
-                throw new ArgumentOutOfRangeException("Stream attempting to free a non-written area.");
+                throw new ArgumentOutOfRangeException(nameof(position), "Stream attempting to free a non-written area.");
             }
             StreamReadPos = position;
         }

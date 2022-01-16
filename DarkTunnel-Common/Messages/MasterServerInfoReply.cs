@@ -4,7 +4,7 @@ using System.Net;
 
 namespace DarkTunnel.Common.Messages
 {
-    [MessageTypeAttribute(MessageType.MASTER_SERVER_INFO_REPLY)]
+    [MessageTypeAttribute(MessageType.MASTERSERVERINFOREPLY)]
     public class MasterServerInfoReply : IMessage
     {
         public int server;

@@ -26,15 +26,10 @@ namespace DarkTunnel.Common
             get
             {
                 Update();
-                if (parent != null)
-                {
-                    int parentBytes = parent.currentBytes;
-                    if (parentBytes < currentBytesPrivate)
-                    {
-                        return parentBytes;
-                    }
-                }
-                return currentBytesPrivate;
+                if (parent == null || parent.currentBytes >= currentBytesPrivate)
+                    return currentBytesPrivate;
+
+                return parent.currentBytes;
             }
         }
         private long lastUpdateTime;
@@ -80,10 +75,7 @@ namespace DarkTunnel.Common
 
         public void Take(int bytes)
         {
-            if (parent != null)
-            {
-                parent.Take(bytes);
-            }
+            parent?.Take(bytes);
             currentBytesPrivate -= bytes;
         }
     }

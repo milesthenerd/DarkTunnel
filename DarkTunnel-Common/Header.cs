@@ -50,9 +50,8 @@ namespace DarkTunnel.Common
                 Load();
             }
             if (br.ReadByte() != 'D' || br.ReadByte() != 'T' || br.ReadByte() != '0' || br.ReadByte() != '1')
-            {
                 return null;
-            }
+
             short type = br.ReadInt16();
             short length = br.ReadInt16();
 
@@ -85,11 +84,10 @@ namespace DarkTunnel.Common
             foreach (Type t in Assembly.GetExecutingAssembly().GetExportedTypes())
             {
                 MessageTypeAttribute mta = t.GetCustomAttribute<MessageTypeAttribute>();
-                if (mta != null)
-                {
-                    t2mt[t] = mta.type;
-                    mt2t[mta.type] = t;
-                }
+                if (mta == null)
+                    continue;
+                t2mt[t] = mta.type;
+                mt2t[mta.type] = t;
             }
         }
     }

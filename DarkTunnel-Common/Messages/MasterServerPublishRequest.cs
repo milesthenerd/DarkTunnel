@@ -2,7 +2,7 @@ using System.IO;
 
 namespace DarkTunnel.Common.Messages
 {
-    [MessageTypeAttribute(MessageType.MASTER_SERVER_PUBLISH_REQUEST)]
+    [MessageTypeAttribute(MessageType.MASTERSERVERPUBLISHREQUEST)]
     public class MasterServerPublishRequest : IMessage
     {
         public int id;

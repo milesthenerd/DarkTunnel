@@ -21,11 +21,9 @@ namespace DarkTunnel.Common
         {
             this.udp = udp;
             this.receiveCallback = receiveCallback;
-            recvThread = new Thread(new ThreadStart(ReceiveLoop));
-            recvThread.Name = "UdpConnection-Receive";
+            recvThread = new Thread(ReceiveLoop) { Name = "UdpConnection-Receive" };
             recvThread.Start();
-            sendThread = new Thread(new ThreadStart(SendLoop));
-            sendThread.Name = "UdpConnection-Send";
+            sendThread = new Thread(SendLoop) { Name = "UdpConnection-Send" };
             sendThread.Start();
         }
 
@@ -41,28 +39,24 @@ namespace DarkTunnel.Common
             byte[] recvBuffer = new byte[1500];
             while (running)
             {
-                if (udp.Poll(5000, SelectMode.SelectRead))
+                if (!udp.Poll(5000, SelectMode.SelectRead))
+                    continue;
+
+                int receivedBytes = 0;
+                EndPoint recvEndpoint = new IPEndPoint(IPAddress.IPv6Any, 0);
+                try
                 {
-                    int receivedBytes = 0;
-                    EndPoint recvEndpoint = new IPEndPoint(IPAddress.IPv6Any, 0);
-                    try
-                    {
-                        receivedBytes = udp.ReceiveFrom(recvBuffer, ref recvEndpoint);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Error receiving: {e}");
-                        continue;
-                    }
-                    using (MemoryStream ms = new MemoryStream(recvBuffer, 0, receivedBytes, false))
-                    {
-                        using (BinaryReader br = new BinaryReader(ms))
-                        {
-                            IMessage receivedMessage = Header.DeframeMessage(br);
-                            receiveCallback(receivedMessage, (IPEndPoint)recvEndpoint);
-                        }
-                    }
+                    receivedBytes = udp.ReceiveFrom(recvBuffer, ref recvEndpoint);
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error receiving: {e}");
+                    continue;
+                }
+                using MemoryStream ms = new MemoryStream(recvBuffer, 0, receivedBytes, false);
+                using BinaryReader br = new BinaryReader(ms);
+                IMessage receivedMessage = Header.DeframeMessage(br);
+                receiveCallback(receivedMessage, (IPEndPoint)recvEndpoint);
             }
         }
 

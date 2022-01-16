@@ -2,7 +2,7 @@ using System.IO;
 
 namespace DarkTunnel.Common.Messages
 {
-    [MessageTypeAttribute(MessageType.MASTER_SERVER_INFO_REQUEST)]
+    [MessageTypeAttribute(MessageType.MASTERSERVERINFOREQUST)]
     public class MasterServerInfoRequest : IMessage
     {
         public int server;

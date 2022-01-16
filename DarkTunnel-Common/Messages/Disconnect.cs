@@ -8,7 +8,7 @@ namespace DarkTunnel.Common.Messages
     {
         public int id;
         public string reason;
-        public String ep;
+        public string ep;
 
         public Disconnect(int id, string reason, string ep)
         {

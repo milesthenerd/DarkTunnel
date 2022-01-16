@@ -1,9 +1,8 @@
-using System;
 using System.IO;
 
 namespace DarkTunnel.Common.Messages
 {
-    [MessageTypeAttribute(MessageType.NEW_CONNECTION_REPLY)]
+    [MessageTypeAttribute(MessageType.NEWCONNECTIONREPLY)]
     public class NewConnectionReply : INodeMessage
     {
         public int id;
