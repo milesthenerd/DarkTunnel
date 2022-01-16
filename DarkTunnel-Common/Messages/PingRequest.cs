@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace DarkTunnel.Common.Messages
@@ -8,7 +7,14 @@ namespace DarkTunnel.Common.Messages
     {
         public int id;
         public long sendTime;
-        public String ep;
+        public string ep;
+
+        public PingRequest(int id, long sendTime, string ep)
+        {
+            this.id = id;
+            this.sendTime = sendTime;
+            this.ep = ep;
+        }
 
         public int GetID()
         {

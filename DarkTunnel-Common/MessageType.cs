@@ -1,5 +1,3 @@
-using System;
-
 namespace DarkTunnel.Common
 {
     public enum MessageType

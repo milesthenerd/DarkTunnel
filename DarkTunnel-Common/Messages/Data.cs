@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace DarkTunnel.Common.Messages
@@ -10,7 +9,16 @@ namespace DarkTunnel.Common.Messages
         public long streamPos;
         public long streamAck;
         public byte[] tcpData;
-        public String ep;
+        public string ep;
+
+        public Data(int id, long streamPos, long streamAck, byte[] tcpData, string ep)
+        {
+            this.id = id;
+            this.streamPos = streamPos;
+            this.streamAck = streamAck;
+            this.tcpData = tcpData;
+            this.ep = ep;
+        }
 
         public int GetID()
         {

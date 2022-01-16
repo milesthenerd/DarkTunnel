@@ -39,6 +39,13 @@ namespace DarkTunnel.Common
         }
         private long lastUpdateTime;
 
+        public TokenBucket(int rateBytesPerSecond, int totalBytes, TokenBucket parent = null)
+        {
+            this.parent = parent;
+            this.rateBytesPerSecond = rateBytesPerSecond;
+            this.totalBytes = totalBytes;
+        }
+
         private void Update()
         {
             //First call, set the buffer full

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace DarkTunnel.Common.Messages
@@ -8,7 +7,14 @@ namespace DarkTunnel.Common.Messages
     {
         public int id;
         public long streamAck;
-        public String ep;
+        public string ep;
+
+        public Ack(int id, long streamAck, string ep)
+        {
+            this.id = id;
+            this.streamAck = streamAck;
+            this.ep = ep;
+        }
 
         public int GetID()
         {

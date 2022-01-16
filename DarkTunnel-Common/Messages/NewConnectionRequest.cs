@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Text;
 
 namespace DarkTunnel.Common.Messages
 {
@@ -10,7 +9,15 @@ namespace DarkTunnel.Common.Messages
         public int id;
         public int protocol_version;
         public int downloadRate;
-        public String ep;
+        public string ep;
+
+        public NewConnectionRequest(int id, int protocol_version, int downloadRate, string ep)
+        {
+            this.id = id;
+            this.protocol_version = protocol_version;
+            this.downloadRate = downloadRate;
+            this.ep = ep;
+        }
 
         public int GetID()
         {

@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Text;
 
 namespace DarkTunnel.Common.Messages
 {
@@ -9,6 +7,12 @@ namespace DarkTunnel.Common.Messages
     {
         public int server;
         public int client;
+
+        public MasterServerInfoRequest(int server = 0, int client = 0)
+        {
+            this.server = server;
+            this.client = client;
+        }
 
         public void Serialize(BinaryWriter writer)
         {

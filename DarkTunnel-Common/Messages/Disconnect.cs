@@ -10,6 +10,13 @@ namespace DarkTunnel.Common.Messages
         public string reason;
         public String ep;
 
+        public Disconnect(int id, string reason, string ep)
+        {
+            this.id = id;
+            this.reason = reason;
+            this.ep = ep;
+        }
+
         public int GetID()
         {
             return id;

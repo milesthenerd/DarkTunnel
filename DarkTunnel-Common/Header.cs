@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Reflection;
-using DarkTunnel.Common.Messages;
 
 //This class is currently not thread safe.
 
@@ -82,7 +80,7 @@ namespace DarkTunnel.Common
             sendBytes[1] = (byte)'T';
             sendBytes[2] = (byte)'0';
             sendBytes[3] = (byte)'1';
-            
+
             //Find all message types
             foreach (Type t in Assembly.GetExecutingAssembly().GetExportedTypes())
             {

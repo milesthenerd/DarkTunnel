@@ -1,5 +1,5 @@
-using System;
 using Gtk;
+using System;
 
 namespace DarkTunnel.GUI
 {

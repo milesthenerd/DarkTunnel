@@ -1,9 +1,9 @@
+using DarkTunnel.Common;
+using DarkTunnel.Common.Messages;
 using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
-using DarkTunnel.Common;
-using DarkTunnel.Common.Messages;
 
 namespace DarkTunnel.Master
 {

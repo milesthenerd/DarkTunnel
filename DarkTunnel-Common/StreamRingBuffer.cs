@@ -72,7 +72,7 @@ namespace DarkTunnel.Common
             if (readDelta < 0 || AvailableRead - readDelta - size < 0)
             {
                 throw new ArgumentOutOfRangeException("Stream trying to read from a non-written area.");
-            }            
+            }
             int firstRead = internalBuffer.Length - (int)(ReadPos % internalBuffer.Length);
             if (firstRead > size)
             {

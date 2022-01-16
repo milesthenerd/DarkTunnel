@@ -25,20 +25,16 @@ namespace DarkTunnel
                     options.isServer = false;
                     options.masterServerID = 0;
                     options.localPort = 25565;
-                    using (StreamWriter sw = new StreamWriter("config.txt"))
-                    {
-                        options.Save(sw);
-                    }
+                    using StreamWriter sw = new StreamWriter("config.txt");
+                    options.Save(sw);
                 }
-                if (cki.KeyChar == 's')
+                else if (cki.KeyChar == 's')
                 {
                     options.isServer = true;
                     options.endpoint = "127.0.0.1:25565";
                     options.localPort = 26702;
-                    using (StreamWriter sw = new StreamWriter("config.txt"))
-                    {
-                        options.Save(sw);
-                    }
+                    using StreamWriter sw = new StreamWriter("config.txt");
+                    options.Save(sw);
                 }
                 return;
             }
@@ -51,12 +47,13 @@ namespace DarkTunnel
                     return;
                 }
             }
-            
+
             TcpClient tcpClient = new TcpClient();
 
             UdpClient udpClient = new UdpClient(options.mediationClientPort);
 
-            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)){
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
                 int SIO_UDP_CONNRESET = -1744830452;
                 udpClient.Client.IOControl((IOControlCode)SIO_UDP_CONNRESET, new byte[] { 0, 0, 0, 0 }, null);
             }
@@ -66,12 +63,11 @@ namespace DarkTunnel
             MediationClient mc = new MediationClient(tcpClient, udpClient, options.mediationIP, options.remoteIP, options.mediationClientPort, endpoint, options.isServer);
 
             mc.TrackedClient();
-            
-            if(options.isServer){
+
+            if (options.isServer)
                 mc.UdpServer();
-            } else {
+            else
                 mc.UdpClient();
-            }
 
             TunnelNode tn = new TunnelNode(options);
             if (options.isServer)
