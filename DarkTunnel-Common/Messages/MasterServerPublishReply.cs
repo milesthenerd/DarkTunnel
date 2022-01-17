@@ -2,7 +2,7 @@ using System.IO;
 
 namespace DarkTunnel.Common.Messages
 {
-    [MessageTypeAttribute(MessageType.MASTERSERVERPUBLISHREPLY)]
+    [MessageTypeAttribute(MessageType.MASTER_SERVER_PUBLISH_REPLY)]
     public class MasterServerPublishReply : IMessage
     {
         public int id;

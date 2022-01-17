@@ -2,7 +2,7 @@ using System.IO;
 
 namespace DarkTunnel.Common.Messages
 {
-    [MessageTypeAttribute(MessageType.PINGREQUEST)]
+    [MessageTypeAttribute(MessageType.PING_REQUEST)]
     public class PingRequest : INodeMessage
     {
         public int id;

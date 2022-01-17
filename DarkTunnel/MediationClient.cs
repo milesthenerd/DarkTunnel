@@ -174,17 +174,6 @@ namespace DarkTunnel
             timer.Elapsed += OnTimedEvent;
         }
 
-        //TODO: never used
-        public void Send(IPEndPoint sendEP, string sendMSG)
-        {
-            //Init buffer with max size of ethernet frame payload limit
-            Console.WriteLine("Writing: " + sendMSG);
-            //Convert string into bytes
-            byte[] sendBuffer = Encoding.ASCII.GetBytes(sendMSG);
-            //Send bytes to specified endpoint
-            udpClient.Send(sendBuffer, sendBuffer.Length, sendEP);
-        }
-
         public void UdpClientListenLoop()
         {
             //Init an IPEndPoint that will be populated with the sender's info
@@ -251,8 +240,6 @@ namespace DarkTunnel
 
                 if (connected && receivedIP != "hi" && listenEP.Address.ToString() == "127.0.0.1")
                 {
-                    //TODO: is this used?
-                    string recvStr = Encoding.ASCII.GetString(recvBuffer);
                     udpClient.Send(recvBuffer, recvBuffer.Length, new IPEndPoint(IPAddress.Parse(intendedIP), intendedPort));
                     Console.WriteLine("huh");
                 }
@@ -388,9 +375,6 @@ namespace DarkTunnel
                                     checkMap = false;
                                 }
                                 Console.WriteLine($"{address}:{port}");
-
-                                //TODO: is this used?
-                                recvStr = recvStr.Remove(splitPos, removeLength);
 
                                 IPEndPoint destEP = new IPEndPoint(IPAddress.Parse(address), port);
 

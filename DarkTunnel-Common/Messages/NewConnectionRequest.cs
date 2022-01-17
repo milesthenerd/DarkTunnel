@@ -3,7 +3,7 @@ using System.IO;
 
 namespace DarkTunnel.Common.Messages
 {
-    [MessageTypeAttribute(MessageType.NEWCONNECTIONREQUEST)]
+    [MessageTypeAttribute(MessageType.NEW_CONNECTION_REQUEST)]
     public class NewConnectionRequest : INodeMessage
     {
         public int id;
