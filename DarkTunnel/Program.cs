@@ -24,7 +24,7 @@ namespace DarkTunnel
                 {
                     options.isServer = false;
                     options.masterServerID = 0;
-                    options.localPort = 25565;
+                    options.localPort = 5001;
                     using (StreamWriter sw = new StreamWriter("config.txt"))
                     {
                         options.Save(sw);
@@ -34,7 +34,7 @@ namespace DarkTunnel
                 {
                     options.isServer = true;
                     options.endpoint = "127.0.0.1:25565";
-                    options.localPort = 26702;
+                    options.localPort = 5001;
                     using (StreamWriter sw = new StreamWriter("config.txt"))
                     {
                         options.Save(sw);
@@ -61,7 +61,7 @@ namespace DarkTunnel
                 udpClient.Client.IOControl((IOControlCode)SIO_UDP_CONNRESET, new byte[] { 0, 0, 0, 0 }, null);
             }
 
-            IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5001);
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), options.localPort);
 
             MediationClient mc = new MediationClient(tcpClient, udpClient, options.mediationIP, options.remoteIP, options.mediationClientPort, endpoint, options.isServer);
 
