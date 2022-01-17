@@ -95,7 +95,7 @@ namespace DarkTunnel
             sw.WriteLine("#endpoint, servers: The TCP server to connect to for forwarding over UDP. Client: The UDP server to connect to (not used when masterServerID is set)");
             sw.WriteLine($"endpoint={endpoint}");
             sw.WriteLine();
-            sw.WriteLine("#mediationIP: The public IP of the peer you want to connect to.");
+            sw.WriteLine("#mediationIP: The public IP and port of the mediation server you want to connect to.");
             sw.WriteLine($"mediationIP={mediationIP.ToString()}");
             sw.WriteLine();
             sw.WriteLine("#remoteIP, clients: The public IP of the peer you want to connect to.");
