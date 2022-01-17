@@ -9,7 +9,7 @@ namespace DarkTunnel
     {
         public bool isServer = false;
         public string endpoint = "serverhost.address.example.com:26702";
-        public IPEndPoint mediationIP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6510);
+        public IPEndPoint mediationIP = new IPEndPoint(IPAddress.Parse("150.136.166.80"), 6510);
         public string remoteIP = "127.0.0.1";
         public List<IPEndPoint> endpoints = new List<IPEndPoint>();
         public int localPort = 0;
