@@ -6,6 +6,6 @@ This program gets around this by retransmitting packets BEFORE the round trip de
   
 TLDR: DarkTunnel makes the game use more internet so you can play minecraft with your friends across the world.  
 
-# Fork Information
+# NATTunnel Information
 
-Aside from the above, this fork is intended to be used with an accompanying node.js script that runs on a public server and mediates udp holepunching between clients. In many cases, it allows people to connect to each other without the need for port forwarding. This can be useful for people that for some reason do not want to or are unable to use port forwarding. 
+Aside from the original info above, this fork is intended to be used with an accompanying node.js script that runs on a public server and mediates udp holepunching between clients. In many cases, it allows people to connect to each other without the need for port forwarding. This can be useful for people that for some reason do not want to or are unable to use port forwarding. 
