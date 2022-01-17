@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace DarkTunnel
 {
@@ -46,7 +47,6 @@ namespace DarkTunnel
 
         public static void Add(IPEndPoint localEP)
         {
-            Console.WriteLine($"pls {localEP} and {mostRecentEP}");
             mapping.Add(localEP, mostRecentEP);
         }
 
@@ -64,7 +64,7 @@ namespace DarkTunnel
                 udpClient.Send(sendBuffer, sendBuffer.Length, ep);
                 Console.WriteLine("Sent");
             }
-            //If connected to remote endpoint, send keep alive msg
+            //If connected to remote endpoint, send keep alive message
             if (connected)
             {
                 byte[] sendBuffer = Encoding.ASCII.GetBytes("hi");
@@ -140,7 +140,7 @@ namespace DarkTunnel
             udpClientThread = new Thread(UdpClientListenLoop);
             udpClientThread.Start();
             //Start timer for hole punch init and keep alive
-            System.Timers.Timer timer = new System.Timers.Timer(1000)
+            Timer timer = new Timer(1000)
             {
                 AutoReset = true,
                 Enabled = true
@@ -166,7 +166,7 @@ namespace DarkTunnel
             udpServerThread = new Thread(UdpServerListenLoop);
             udpServerThread.Start();
             //Start timer for hole punch init and keep alive
-            System.Timers.Timer timer = new System.Timers.Timer(1000)
+            Timer timer = new Timer(1000)
             {
                 AutoReset = true,
                 Enabled = true
@@ -205,7 +205,6 @@ namespace DarkTunnel
                         {
                             Console.WriteLine(e);
                         }
-
                         connected = true;
                     }
                 }
@@ -220,9 +219,7 @@ namespace DarkTunnel
                     receivedIP = msgArray[0];
                     receivedPort = 0;
                     if (msgArray.Length > 1)
-                    {
                         receivedPort = int.Parse(msgArray[1]);
-                    }
                 }
 
                 if (receivedIP == intendedIP && holePunchReceivedCount < 5)
@@ -238,6 +235,7 @@ namespace DarkTunnel
                     }
                 }
 
+                //TODO: pretty sure this is not necessary / can be condensed
                 if (connected && receivedIP != "hi" && listenEP.Address.ToString() == "127.0.0.1")
                 {
                     udpClient.Send(recvBuffer, recvBuffer.Length, new IPEndPoint(IPAddress.Parse(intendedIP), intendedPort));
@@ -275,18 +273,15 @@ namespace DarkTunnel
 
                     Console.WriteLine($"{key} and {listenEP}");
                     if (key.Address.ToString() == listenEP.Address.ToString())
-                    {
                         timeoutClients[key] = 5;
-                    }
                 }
 
                 Console.WriteLine($"length {timeoutClients.Count} and {connectedClients.Count}");
                 Console.WriteLine("Received UDP: {0} bytes from {1}:{2}", recvBuffer.Length, listenEP.Address, listenEP.Port);
 
                 if (listenEP.Address.ToString() != "127.0.0.1" && listenEP.Port != mediationClientPort)
-                {
                     localAppPort = listenEP.Port;
-                }
+
 
                 if (!connectedClients.Exists(element => element.Address.ToString() == listenEP.Address.ToString()) && listenEP.Address.ToString() == intendedIP)
                 {
@@ -343,6 +338,7 @@ namespace DarkTunnel
                 {
                     string recvStr = Encoding.ASCII.GetString(recvBuffer);
                     int splitPos = recvStr.IndexOf("end");
+                    //TODO: unused?
                     int removeLength = recvStr.Length - splitPos;
                     if (splitPos > 0)
                     {

@@ -63,9 +63,7 @@ namespace DarkTunnel
 
                 //Disconnect if we hit the timeout
                 if ((currentTime - lastUdpRecvTime) > TIMEOUT)
-                {
                     Disconnect("UDP Receive Timeout");
-                }
 
                 //Only do the following if we are connected
                 if (udpEndpoint == null) continue;
@@ -118,9 +116,8 @@ namespace DarkTunnel
 
             //MarkFree is not thread safe with Read
             if (txQueue.StreamReadPos < ackSafe)
-            {
                 txQueue.MarkFree(ackSafe);
-            }
+
 
             //Don't send old data.
             if (currentSendPos < txQueue.StreamReadPos)
@@ -151,40 +148,30 @@ namespace DarkTunnel
                 }
             }
 
-            //Ran out of bytes to send
+            //Ran out of bytes to send and Rate limit
             long bytesToWrite = txQueue.StreamWritePos - currentSendPos;
-            if (bytesToWrite == 0)
-            {
-                Thread.Sleep(10);
-                return;
-            }
-
-            //Rate limit
-            if (bucket.currentBytes < 500)
+            if (bytesToWrite == 0 || bucket.currentBytes < 500)
             {
                 Thread.Sleep(10);
                 return;
             }
 
             //Clamp to 500 byte packets
-            if (bytesToWrite > 1250)
-            {
-                bytesToWrite = 1250;
-            }
+            const int upperLimit = 1250;
+            if (bytesToWrite > upperLimit)
+                bytesToWrite = upperLimit;
 
             //Send data
-            Data d = new Data(id, currentSendPos, currentRecvPos, new byte[bytesToWrite], null);
-            //TODO: why not use the return value?
-            txQueue.Read(d.tcpData, 0, currentSendPos, (int)bytesToWrite);
-            //after d.tcpData has been written, convert to string, append localhost:port to end of payload, change back to bytes
-            d.ep = $"end{localTCPEndpoint}";
+            Data data = new Data(id, currentSendPos, currentRecvPos, new byte[bytesToWrite], $"end{localTCPEndpoint}");
+            txQueue.Read(data.tcpData, 0, currentSendPos, (int)bytesToWrite);
             lastUdpSendAckTime = currentTime;
             lastUdpSendTime = currentTime;
-            connection.Send(d, udpEndpoint);
+            connection.Send(data, udpEndpoint);
             currentSendPos += bytesToWrite;
             bucket.Take((int)bytesToWrite);
         }
 
+        //TODO: fromUDP is unused
         public void ReceiveData(Data d, bool fromUDP)
         {
             if (d.streamAck > ackSafe)
@@ -197,9 +184,8 @@ namespace DarkTunnel
             if ((d.streamPos + d.tcpData.Length) <= currentRecvPos)
             {
                 if ((d.streamPos + d.tcpData.Length) == currentRecvPos)
-                {
                     SendAck(true);
-                }
+
                 return;
             }
 

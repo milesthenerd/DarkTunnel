@@ -68,9 +68,8 @@ namespace DarkTunnel.Master
                         if (msp.secret == entry.secret)
                         {
                             if (!entry.endpoints.Contains(endpoint))
-                            {
                                 entry.endpoints.Add(endpoint);
-                            }
+
                             entry.lastPublishTime = DateTime.UtcNow.Ticks;
                             mspr.status = true;
                             mspr.message = "Updated OK";
@@ -84,9 +83,8 @@ namespace DarkTunnel.Master
                             lastPublishTime = DateTime.UtcNow.Ticks
                         };
                         if (!entry2.endpoints.Contains(endpoint))
-                        {
                             entry2.endpoints.Add(endpoint);
-                        }
+
                         published.TryAdd(msp.id, entry2);
                         mspr.status = true;
                         mspr.message = "Registered OK";

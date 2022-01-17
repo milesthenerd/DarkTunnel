@@ -34,47 +34,46 @@ namespace DarkTunnel
             while ((currentLine = sr.ReadLine()) != null)
             {
                 int splitIndex = currentLine.IndexOf("=");
-                if (splitIndex > 0)
+                if (splitIndex <= 0) continue;
+
+                string lhs = currentLine.Substring(0, splitIndex);
+                string rhs = currentLine.Substring(splitIndex + 1);
+                switch (lhs)
                 {
-                    string lhs = currentLine.Substring(0, splitIndex);
-                    string rhs = currentLine.Substring(splitIndex + 1);
-                    switch (lhs)
-                    {
-                        case "mode":
-                            isServer = rhs == "server";
-                            break;
-                        case "endpoint":
-                            endpoint = rhs;
-                            ResolveAddress();
-                            break;
-                        case "mediationIP":
-                            mediationIP = IPEndPoint.Parse(rhs);
-                            break;
-                        case "remoteIP":
-                            remoteIP = rhs;
-                            break;
-                        case "localPort":
-                            localPort = Int32.Parse(rhs);
-                            break;
-                        case "mediationClientPort":
-                            mediationClientPort = Int32.Parse(rhs);
-                            break;
-                        case "uploadSpeed":
-                            uploadSpeed = Int32.Parse(rhs);
-                            break;
-                        case "downloadSpeed":
-                            downloadSpeed = Int32.Parse(rhs);
-                            break;
-                        case "minRetransmitTime":
-                            minRetransmitTime = Int32.Parse(rhs);
-                            break;
-                        case "masterServerID":
-                            masterServerID = Int32.Parse(rhs);
-                            break;
-                        case "masterServerSecret":
-                            masterServerSecret = Int32.Parse(rhs);
-                            break;
-                    }
+                    case "mode":
+                        isServer = rhs == "server";
+                        break;
+                    case "endpoint":
+                        endpoint = rhs;
+                        ResolveAddress();
+                        break;
+                    case "mediationIP":
+                        mediationIP = IPEndPoint.Parse(rhs);
+                        break;
+                    case "remoteIP":
+                        remoteIP = rhs;
+                        break;
+                    case "localPort":
+                        localPort = Int32.Parse(rhs);
+                        break;
+                    case "mediationClientPort":
+                        mediationClientPort = Int32.Parse(rhs);
+                        break;
+                    case "uploadSpeed":
+                        uploadSpeed = Int32.Parse(rhs);
+                        break;
+                    case "downloadSpeed":
+                        downloadSpeed = Int32.Parse(rhs);
+                        break;
+                    case "minRetransmitTime":
+                        minRetransmitTime = Int32.Parse(rhs);
+                        break;
+                    case "masterServerID":
+                        masterServerID = Int32.Parse(rhs);
+                        break;
+                    case "masterServerSecret":
+                        masterServerSecret = Int32.Parse(rhs);
+                        break;
                 }
             }
             return true;

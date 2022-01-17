@@ -27,17 +27,14 @@ namespace DarkTunnel.Common
             using (MemoryStream ms = new MemoryStream(buildBytes))
             {
                 using (BinaryWriter bw = new BinaryWriter(ms, System.Text.Encoding.UTF8, true))
-                {
                     message.Serialize(bw);
-                }
+
                 short type = (short)t2mt[message.GetType()];
                 short length = (short)ms.Position;
                 BitConverter.GetBytes(type).CopyTo(sendBytes, 4);
                 BitConverter.GetBytes(length).CopyTo(sendBytes, 6);
                 if (length > 0)
-                {
                     Array.Copy(buildBytes, 0, sendBytes, 8, length);
-                }
             }
             return sendBytes;
         }
@@ -55,20 +52,14 @@ namespace DarkTunnel.Common
             short type = br.ReadInt16();
             short length = br.ReadInt16();
 
-            if (!Enum.IsDefined(typeof(MessageType), (int)type))
-            {
+            if (!Enum.IsDefined(typeof(MessageType), (int)type) || (length != br.BaseStream.Length - 8))
                 return null;
-            }
-            if (length != br.BaseStream.Length - 8)
-            {
-                return null;
-            }
+
             Type messageType = mt2t[(MessageType)type];
             IMessage message = (IMessage)Activator.CreateInstance(messageType);
             if (length > 0)
-            {
                 message.Deserialize(br);
-            }
+
             return message;
         }
 

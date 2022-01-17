@@ -17,9 +17,7 @@ namespace DarkTunnel
             {
                 Data test = futureData[d.streamPos];
                 if (d.tcpData.Length > test.tcpData.Length)
-                {
                     futureData[d.streamPos] = d;
-                }
             }
         }
 
@@ -44,13 +42,9 @@ namespace DarkTunnel
             {
                 Data d = futureData.Values[0];
                 if ((d.streamPos + d.tcpData.Length) <= currentRecvPos)
-                {
                     futureData.Remove(d.streamPos);
-                }
                 else
-                {
                     return;
-                }
             }
         }
     }

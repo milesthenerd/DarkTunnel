@@ -153,7 +153,7 @@ namespace DarkTunnel
                 }
             }
 
-            switch(message)
+            switch (message)
             {
                 case NewConnectionRequest nc:
                 {
@@ -332,7 +332,5 @@ namespace DarkTunnel
                 }
             }
         }
-
-
     }
 }

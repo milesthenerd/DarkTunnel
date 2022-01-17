@@ -56,21 +56,15 @@ namespace DarkTunnel.Common
 
             //Only update once per millisecond
             if (timeDelta < TimeSpan.TicksPerMillisecond)
-            {
                 return;
-            }
 
             long newBytes = (rateBytesPerSecond * timeDelta) / TimeSpan.TicksPerSecond;
             currentBytesPrivate += (int)newBytes;
             if (currentBytesPrivate > totalBytes)
-            {
                 currentBytesPrivate = totalBytes;
-            }
 
             if (newBytes > 0)
-            {
                 lastUpdateTime = currentTime;
-            }
         }
 
         public void Take(int bytes)
