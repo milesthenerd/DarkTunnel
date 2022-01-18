@@ -73,8 +73,12 @@ namespace DarkTunnel
             {
                 long currentTime = DateTime.UtcNow.Ticks;
 
-                foreach (var client in clients.Where(client => !client.connected))
+                // This needs to be a for loop, as the collection gets modifed during runtime, which throws
+                for (int i = 0; i < clients.Count; i++)
                 {
+                    var client = clients[i];
+                    if (client.connected) continue;
+
                     if (clientMapping.ContainsKey(client.id))
                     {
                         MediationClient.Remove(clientMapping[client.id].localTCPEndpoint);
