@@ -8,6 +8,12 @@ namespace DarkTunnel.Common.Messages
         public int server;
         public int client;
 
+        public MasterServerInfoRequest()
+        {
+            server = 0;
+            client = 0;
+        }
+
         public MasterServerInfoRequest(int server = 0, int client = 0)
         {
             this.server = server;

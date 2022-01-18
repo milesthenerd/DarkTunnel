@@ -9,6 +9,13 @@ namespace DarkTunnel.Common.Messages
         public long streamAck;
         public string ep;
 
+        public Ack()
+        {
+            id = 0;
+            streamAck = 0;
+            ep = "";
+        }
+
         public Ack(int id, long streamAck, string ep)
         {
             this.id = id;

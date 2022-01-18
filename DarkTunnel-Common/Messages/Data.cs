@@ -11,6 +11,13 @@ namespace DarkTunnel.Common.Messages
         public byte[] tcpData;
         public string ep;
 
+        public Data()
+        {
+            id = 0;
+            streamAck = 0;
+            ep = "";
+        }
+
         public Data(int id, long streamPos, long streamAck, byte[] tcpData, string ep)
         {
             this.id = id;

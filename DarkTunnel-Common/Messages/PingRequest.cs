@@ -9,6 +9,13 @@ namespace DarkTunnel.Common.Messages
         public long sendTime;
         public string ep;
 
+        public PingRequest()
+        {
+            id = 0;
+            sendTime = 0;
+            ep = "";
+        }
+
         public PingRequest(int id, long sendTime, string ep)
         {
             this.id = id;

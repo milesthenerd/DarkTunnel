@@ -11,6 +11,14 @@ namespace DarkTunnel.Common.Messages
         public int downloadRate;
         public string ep;
 
+        public NewConnectionRequest()
+        {
+            id = 0;
+            protocol_version = 0;
+            downloadRate = 0;
+            ep = "";
+        }
+
         public NewConnectionRequest(int id, int protocol_version, int downloadRate, string ep)
         {
             this.id = id;
