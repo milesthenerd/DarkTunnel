@@ -172,34 +172,34 @@ namespace DarkTunnel
         }
 
         //TODO: fromUDP is unused
-        public void ReceiveData(Data d, bool fromUDP)
+        public void ReceiveData(Data data, bool fromUDP)
         {
-            if (d.streamAck > ackSafe)
+            if (data.streamAck > ackSafe)
             {
                 lastUdpRecvAckTime = DateTime.UtcNow.Ticks;
-                ackSafe = d.streamAck;
+                ackSafe = data.streamAck;
             }
 
             //Data from the past
-            if ((d.streamPos + d.tcpData.Length) <= currentRecvPos)
+            if ((data.streamPos + data.tcpData.Length) <= currentRecvPos)
             {
-                if ((d.streamPos + d.tcpData.Length) == currentRecvPos)
+                if ((data.streamPos + data.tcpData.Length) == currentRecvPos)
                     SendAck(true);
 
                 return;
             }
 
             //Data in the future
-            if (d.streamPos > currentRecvPos)
+            if (data.streamPos > currentRecvPos)
             {
-                futureDataStore.StoreData(d);
+                futureDataStore.StoreData(data);
                 return;
             }
 
             //Exact packet we need, include partial matches
-            int offset = (int)(currentRecvPos - d.streamPos);
-            tcp.GetStream().Write(d.tcpData, offset, d.tcpData.Length - offset);
-            currentRecvPos += d.tcpData.Length - offset;
+            int offset = (int)(currentRecvPos - data.streamPos);
+            tcp.GetStream().Write(data.tcpData, offset, data.tcpData.Length - offset);
+            currentRecvPos += data.tcpData.Length - offset;
 
             //Handle out of order data
             Data future;

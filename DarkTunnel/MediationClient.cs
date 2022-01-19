@@ -245,7 +245,15 @@ namespace DarkTunnel
                 if (!connected || receivedIP == "hi" || listenEP.Address.ToString() != intendedIP)
                     continue;
 
-                udpClient.Send(recvBuffer, recvBuffer.Length, new IPEndPoint(IPAddress.Parse("127.0.0.1"), localAppPort));
+                try
+                {
+                    udpClient.Send(recvBuffer, recvBuffer.Length, new IPEndPoint(IPAddress.Parse("127.0.0.1"), localAppPort));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
                 Console.WriteLine("huh 2");
             }
         }
@@ -338,8 +346,6 @@ namespace DarkTunnel
                 {
                     string recvStr = Encoding.ASCII.GetString(recvBuffer);
                     int splitPos = recvStr.IndexOf("end");
-                    //TODO: unused?
-                    int removeLength = recvStr.Length - splitPos;
                     if (splitPos > 0)
                     {
                         string[] recvSplit = recvStr.Split("end");

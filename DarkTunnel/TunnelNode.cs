@@ -175,15 +175,15 @@ namespace DarkTunnel
                         {
                             tcp.Connect(options.endpoints[0]);
                             client = new Client(options, nc.id, connection, tcp, connectionBucket);
+                            //add mapping for local tcp client and remote IP
                             clients.Add(client);
                             clientMapping.Add(client.id, client);
                             MediationClient.Add(client.localTCPEndpoint);
-                            //add mapping for local tcp client and remote IP
                         }
                         catch
                         {
-                            //TODO do something about this
-                            Disconnect dis = new Disconnect(nc.id, "TCP server is currently not running", $"end{client.localTCPEndpoint}");
+                            //TODO do something about this null bandaid
+                            Disconnect dis = new Disconnect(nc.id, "TCP server is currently not running", $"end{client?.localTCPEndpoint}");
                             connection.Send(dis, endpoint);
                             return;
                         }
@@ -282,6 +282,8 @@ namespace DarkTunnel
                     if (clientMapping.ContainsKey(data.id))
                     {
                         Client client = clientMapping[data.id];
+                        //TODO: WHY IS THIS NECESSARY!?!?!?
+                        client.udpEndpoint = endpoint;
                         if (client.tcp != null) client.ReceiveData(data, true);
                     }
                     break;

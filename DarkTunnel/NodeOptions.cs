@@ -93,7 +93,7 @@ namespace DarkTunnel
             sw.WriteLine("#remoteIP, clients: The public IP of the peer you want to connect to.");
             sw.WriteLine($"remoteIP={remoteIP}");
             sw.WriteLine();
-            sw.WriteLine("#localPort: servers: The UDP server port. client: The TCP port to hose the forwarded server on.");
+            sw.WriteLine("#localPort: servers: The UDP server port. client: The TCP port to host the forwarded server on.");
             sw.WriteLine($"localPort={localPort}");
             sw.WriteLine();
             sw.WriteLine("#mediationClientPort: The UDP mediation client port. This is the port that will have a hole punched through the NAT by the mediation server, and all traffic will pass through it.");
