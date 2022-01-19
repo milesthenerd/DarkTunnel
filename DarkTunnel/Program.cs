@@ -12,6 +12,8 @@ namespace DarkTunnel
         public static void Main(string[] args)
         {
             //TODO: this whole project has a bunch of obsolete console.writelines
+
+            //TODO: the port endpoint has to be the same as the mediationclientport, as otherwise this is handled weirdly somewhere in this mess
             if (!File.Exists("config.txt") && !TryCreateNewConfig())
                 return;
 
