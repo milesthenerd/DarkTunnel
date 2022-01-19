@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RollForward>LatestMajor</RollForward>
-    <RootNamespace>DarkTunnel.Common</RootNamespace>
+    <RootNamespace>NATTunnel.Common</RootNamespace>
   </PropertyGroup>
 
 </Project>

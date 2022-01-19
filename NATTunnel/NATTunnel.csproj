@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\DarkTunnel-Common\NATTunnel-Common.csproj" />
+    <ProjectReference Include="..\NATTunnel-Common\NATTunnel-Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
