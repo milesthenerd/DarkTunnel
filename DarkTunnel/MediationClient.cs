@@ -8,7 +8,7 @@ using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace DarkTunnel
+namespace NATTunnel
 {
     public class MediationClient
     {

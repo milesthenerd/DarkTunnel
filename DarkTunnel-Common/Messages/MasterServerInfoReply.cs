@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace DarkTunnel.Common.Messages
+namespace NATTunnel.Common.Messages
 {
     [MessageTypeAttribute(MessageType.MASTER_SERVER_INFO_REPLY)]
     public class MasterServerInfoReply : IMessage

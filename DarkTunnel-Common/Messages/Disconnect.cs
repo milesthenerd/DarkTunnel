@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace DarkTunnel.Common.Messages
+namespace NATTunnel.Common.Messages
 {
     [MessageTypeAttribute(MessageType.DISCONNECT)]
     public class Disconnect : INodeMessage

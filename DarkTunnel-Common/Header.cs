@@ -5,7 +5,7 @@ using System.Reflection;
 
 //This class is currently not thread safe.
 
-namespace DarkTunnel.Common
+namespace NATTunnel.Common
 {
     public static class Header
     {

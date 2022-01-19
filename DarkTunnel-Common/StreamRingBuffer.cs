@@ -3,7 +3,7 @@
 
 using System;
 
-namespace DarkTunnel.Common
+namespace NATTunnel.Common
 {
     public class StreamRingBuffer
     {

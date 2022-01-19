@@ -1,11 +1,11 @@
-using DarkTunnel.Common;
-using DarkTunnel.Common.Messages;
+using NATTunnel.Common;
+using NATTunnel.Common.Messages;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace DarkTunnel
+namespace NATTunnel
 {
     public class Client
     {

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace DarkTunnel.Common.Messages
+namespace NATTunnel.Common.Messages
 {
     [MessageTypeAttribute(MessageType.NEW_CONNECTION_REPLY)]
     public class NewConnectionReply : INodeMessage

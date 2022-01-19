@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace DarkTunnel.Common
+namespace NATTunnel.Common
 {
     public class UdpConnection
     {

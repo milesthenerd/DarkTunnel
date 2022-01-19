@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DarkTunnel.Master
+namespace NATTunnel.Master
 {
     static class Program
     {

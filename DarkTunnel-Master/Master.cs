@@ -1,11 +1,11 @@
-using DarkTunnel.Common;
-using DarkTunnel.Common.Messages;
+using NATTunnel.Common;
+using NATTunnel.Common.Messages;
 using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 
-namespace DarkTunnel.Master
+namespace NATTunnel.Master
 {
     public class MasterServer
     {

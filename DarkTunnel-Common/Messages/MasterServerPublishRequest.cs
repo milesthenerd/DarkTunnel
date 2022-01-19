@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace DarkTunnel.Common.Messages
+namespace NATTunnel.Common.Messages
 {
     [MessageTypeAttribute(MessageType.MASTER_SERVER_PUBLISH_REQUEST)]
     public class MasterServerPublishRequest : IMessage
