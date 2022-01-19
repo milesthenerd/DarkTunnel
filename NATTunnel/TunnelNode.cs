@@ -21,7 +21,7 @@ namespace NATTunnel
         private UdpConnection connection;
         private List<Client> clients = new List<Client>();
         private Dictionary<int, Client> clientMapping = new Dictionary<int, Client>();
-        private IPAddress[] masterServerAddresses = Dns.GetHostAddresses("darktunnel.godarklight.privatedns.org");
+        private IPAddress[] masterServerAddresses = Dns.GetHostAddresses("NATTunnel.godarklight.privatedns.org");
         //Master state
         private long nextMasterTime = 0;
         private TokenBucket connectionBucket;
