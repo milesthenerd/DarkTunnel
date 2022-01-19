@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
 
-namespace DarkTunnel.Master
+namespace NATTunnel.Master
 {
     class PublishEntry
     {

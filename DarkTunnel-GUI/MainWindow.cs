@@ -2,7 +2,7 @@ using Gtk;
 using System;
 using UI = Gtk.Builder.ObjectAttribute;
 
-namespace DarkTunnel.GUI
+namespace NATTunnel.GUI
 {
     class MainWindow : Window
     {

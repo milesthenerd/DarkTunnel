@@ -1,7 +1,7 @@
 using Gtk;
 using System;
 
-namespace DarkTunnel.GUI
+namespace NATTunnel.GUI
 {
     static class Program
     {

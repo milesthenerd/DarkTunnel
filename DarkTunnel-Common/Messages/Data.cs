@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace DarkTunnel.Common.Messages
+namespace NATTunnel.Common.Messages
 {
     [MessageTypeAttribute(MessageType.DATA)]
     public class Data : INodeMessage

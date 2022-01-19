@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace DarkTunnel.Common.Messages
+namespace NATTunnel.Common.Messages
 {
     [MessageTypeAttribute(MessageType.MASTER_PRINT_CONSOLE)]
     public class PrintConsole : INodeMessage

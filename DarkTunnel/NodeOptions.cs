@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace DarkTunnel
+namespace NATTunnel
 {
     public class NodeOptions
     {

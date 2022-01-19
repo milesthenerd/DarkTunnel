@@ -1,4 +1,4 @@
-namespace DarkTunnel.Common
+namespace NATTunnel.Common
 {
     public enum MessageType
     {

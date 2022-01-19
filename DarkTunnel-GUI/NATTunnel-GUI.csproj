@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DarkTunnel-Common\DarkTunnel-Common.csproj" />
-    <ProjectReference Include="..\DarkTunnel\DarkTunnel.csproj" />
+    <ProjectReference Include="..\DarkTunnel-Common\NATTunnel-Common.csproj" />
+    <ProjectReference Include="..\DarkTunnel\NATTunnel.csproj" />
   </ItemGroup>
 
 </Project>

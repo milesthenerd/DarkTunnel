@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DarkTunnel.Common
+namespace NATTunnel.Common
 {
     public interface IMessage
     {

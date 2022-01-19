@@ -1,7 +1,7 @@
-using DarkTunnel.Common.Messages;
+using NATTunnel.Common.Messages;
 using System.Collections.Generic;
 
-namespace DarkTunnel
+namespace NATTunnel
 {
     public class FutureDataStore
     {
