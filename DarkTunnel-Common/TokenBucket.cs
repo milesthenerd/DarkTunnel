@@ -26,18 +26,20 @@ namespace DarkTunnel.Common
             get
             {
                 Update();
-                if (parent != null)
-                {
-                    int parentBytes = parent.currentBytes;
-                    if (parentBytes < currentBytesPrivate)
-                    {
-                        return parentBytes;
-                    }
-                }
-                return currentBytesPrivate;
+                if (parent == null || parent.currentBytes >= currentBytesPrivate)
+                    return currentBytesPrivate;
+
+                return parent.currentBytes;
             }
         }
         private long lastUpdateTime;
+
+        public TokenBucket(int rateBytesPerSecond, int totalBytes, TokenBucket parent = null)
+        {
+            this.parent = parent;
+            this.rateBytesPerSecond = rateBytesPerSecond;
+            this.totalBytes = totalBytes;
+        }
 
         private void Update()
         {
@@ -54,29 +56,20 @@ namespace DarkTunnel.Common
 
             //Only update once per millisecond
             if (timeDelta < TimeSpan.TicksPerMillisecond)
-            {
                 return;
-            }
 
             long newBytes = (rateBytesPerSecond * timeDelta) / TimeSpan.TicksPerSecond;
             currentBytesPrivate += (int)newBytes;
             if (currentBytesPrivate > totalBytes)
-            {
                 currentBytesPrivate = totalBytes;
-            }
 
             if (newBytes > 0)
-            {
                 lastUpdateTime = currentTime;
-            }
         }
 
         public void Take(int bytes)
         {
-            if (parent != null)
-            {
-                parent.Take(bytes);
-            }
+            parent?.Take(bytes);
             currentBytesPrivate -= bytes;
         }
     }

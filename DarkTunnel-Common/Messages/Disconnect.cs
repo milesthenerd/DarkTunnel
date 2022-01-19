@@ -8,7 +8,21 @@ namespace DarkTunnel.Common.Messages
     {
         public int id;
         public string reason;
-        public String ep;
+        public string ep;
+
+        public Disconnect()
+        {
+            id = 0;
+            reason = "";
+            ep = "";
+        }
+
+        public Disconnect(int id, string reason, string ep)
+        {
+            this.id = id;
+            this.reason = reason;
+            this.ep = ep;
+        }
 
         public int GetID()
         {

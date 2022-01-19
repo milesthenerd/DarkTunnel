@@ -30,51 +30,50 @@ namespace DarkTunnel
 
         public bool Load(StreamReader sr)
         {
-            string currentLine = null;
+            string currentLine;
             while ((currentLine = sr.ReadLine()) != null)
             {
                 int splitIndex = currentLine.IndexOf("=");
-                if (splitIndex > 0)
+                if (splitIndex <= 0) continue;
+
+                string lhs = currentLine.Substring(0, splitIndex);
+                string rhs = currentLine.Substring(splitIndex + 1);
+                switch (lhs)
                 {
-                    string lhs = currentLine.Substring(0, splitIndex);
-                    string rhs = currentLine.Substring(splitIndex + 1);
-                    switch (lhs)
-                    {
-                        case "mode":
-                            isServer = rhs == "server";
-                            break;
-                        case "endpoint":
-                            endpoint = rhs;
-                            ResolveAddress();
-                            break;
-                        case "mediationIP":
-                            mediationIP = IPEndPoint.Parse(rhs);
-                            break;
-                        case "remoteIP":
-                            remoteIP = rhs;
-                            break;
-                        case "localPort":
-                            localPort = Int32.Parse(rhs);
-                            break;
-                        case "mediationClientPort":
-                            mediationClientPort = Int32.Parse(rhs);
-                            break;
-                        case "uploadSpeed":
-                            uploadSpeed = Int32.Parse(rhs);
-                            break;
-                        case "downloadSpeed":
-                            downloadSpeed = Int32.Parse(rhs);
-                            break;
-                        case "minRetransmitTime":
-                            minRetransmitTime = Int32.Parse(rhs);
-                            break;
-                        case "masterServerID":
-                            masterServerID = Int32.Parse(rhs);
-                            break;
-                        case "masterServerSecret":
-                            masterServerSecret = Int32.Parse(rhs);
-                            break;
-                    }
+                    case "mode":
+                        isServer = rhs == "server";
+                        break;
+                    case "endpoint":
+                        endpoint = rhs;
+                        ResolveAddress();
+                        break;
+                    case "mediationIP":
+                        mediationIP = IPEndPoint.Parse(rhs);
+                        break;
+                    case "remoteIP":
+                        remoteIP = rhs;
+                        break;
+                    case "localPort":
+                        localPort = Int32.Parse(rhs);
+                        break;
+                    case "mediationClientPort":
+                        mediationClientPort = Int32.Parse(rhs);
+                        break;
+                    case "uploadSpeed":
+                        uploadSpeed = Int32.Parse(rhs);
+                        break;
+                    case "downloadSpeed":
+                        downloadSpeed = Int32.Parse(rhs);
+                        break;
+                    case "minRetransmitTime":
+                        minRetransmitTime = Int32.Parse(rhs);
+                        break;
+                    case "masterServerID":
+                        masterServerID = Int32.Parse(rhs);
+                        break;
+                    case "masterServerSecret":
+                        masterServerSecret = Int32.Parse(rhs);
+                        break;
                 }
             }
             return true;
@@ -83,14 +82,7 @@ namespace DarkTunnel
         public void Save(StreamWriter sw)
         {
             sw.WriteLine("#mode: Set to server if you want to host a local server over UDP, client if you want to connect to a server over UDP");
-            if (isServer)
-            {
-                sw.WriteLine("mode=server");
-            }
-            else
-            {
-                sw.WriteLine("mode=client");
-            }
+            sw.WriteLine(isServer ? "mode=server" : "mode=client");
             sw.WriteLine();
             sw.WriteLine("#endpoint, servers: The TCP server to connect to for forwarding over UDP. Client: The UDP server to connect to (not used when masterServerID is set)");
             sw.WriteLine($"endpoint={endpoint}");
@@ -101,7 +93,7 @@ namespace DarkTunnel
             sw.WriteLine("#remoteIP, clients: The public IP of the peer you want to connect to.");
             sw.WriteLine($"remoteIP={remoteIP}");
             sw.WriteLine();
-            sw.WriteLine("#localPort: servers: The UDP server port. client: The TCP port to hose the forwarded server on.");
+            sw.WriteLine("#localPort: servers: The UDP server port. client: The TCP port to host the forwarded server on.");
             sw.WriteLine($"localPort={localPort}");
             sw.WriteLine();
             sw.WriteLine("#mediationClientPort: The UDP mediation client port. This is the port that will have a hole punched through the NAT by the mediation server, and all traffic will pass through it.");

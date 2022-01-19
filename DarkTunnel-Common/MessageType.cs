@@ -1,5 +1,3 @@
-using System;
-
 namespace DarkTunnel.Common
 {
     public enum MessageType
@@ -17,6 +15,6 @@ namespace DarkTunnel.Common
         MASTER_SERVER_INFO_REPLY = 101,
         MASTER_SERVER_PUBLISH_REQUEST = 110,
         MASTER_SERVER_PUBLISH_REPLY = 111,
-        MASTER_PRINT_CONSOLE = 120,
+        MASTER_PRINT_CONSOLE = 120
     }
 }

@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using DarkTunnel.Common.Messages;
+using System.Collections.Generic;
 
 namespace DarkTunnel
 {
@@ -18,9 +17,7 @@ namespace DarkTunnel
             {
                 Data test = futureData[d.streamPos];
                 if (d.tcpData.Length > test.tcpData.Length)
-                {
                     futureData[d.streamPos] = d;
-                }
             }
         }
 
@@ -29,17 +26,14 @@ namespace DarkTunnel
             //Deletes all data from the past
             SetReceivePos(currentRecvPos);
 
-            if (futureData.Count > 0)
-            {
-                Data canditate = futureData.Values[0];
-                //We have current data!
-                if (canditate.streamPos <= currentRecvPos)
-                {
-                    futureData.Remove(canditate.streamPos);
-                    return canditate;
-                }
-            }
-            return null;
+            if (futureData.Count <= 0) return null;
+
+            Data candidate = futureData.Values[0];
+            if (candidate.streamPos > currentRecvPos) return null;
+
+            //We have current data!
+            futureData.Remove(candidate.streamPos);
+            return candidate;
         }
 
         private void SetReceivePos(long currentRecvPos)
@@ -47,14 +41,10 @@ namespace DarkTunnel
             while (futureData.Count > 0)
             {
                 Data d = futureData.Values[0];
-                if (d.streamPos + d.tcpData.Length <= currentRecvPos)
-                {
+                if ((d.streamPos + d.tcpData.Length) <= currentRecvPos)
                     futureData.Remove(d.streamPos);
-                }
                 else
-                {
                     return;
-                }
             }
         }
     }

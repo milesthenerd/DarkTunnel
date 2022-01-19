@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Text;
 
 namespace DarkTunnel.Common.Messages
 {
@@ -10,6 +8,21 @@ namespace DarkTunnel.Common.Messages
         public int id;
         public int secret;
         public int localPort;
+
+        public MasterServerPublishRequest()
+        {
+            id = 0;
+            secret = 0;
+            localPort = 0;
+        }
+
+        public MasterServerPublishRequest(int id, int secret, int localPort)
+        {
+            this.id = id;
+            this.secret = secret;
+            this.localPort = localPort;
+        }
+
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(id);

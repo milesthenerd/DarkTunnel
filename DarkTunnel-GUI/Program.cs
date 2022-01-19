@@ -1,9 +1,9 @@
-using System;
 using Gtk;
+using System;
 
 namespace DarkTunnel.GUI
 {
-    class Program
+    static class Program
     {
         [STAThread]
         public static void Main(string[] args)

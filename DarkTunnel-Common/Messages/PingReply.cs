@@ -8,7 +8,21 @@ namespace DarkTunnel.Common.Messages
     {
         public int id;
         public long sendTime;
-        public String ep;
+        public string ep;
+
+        public PingReply()
+        {
+            id = 0;
+            sendTime = 0;
+            ep = "";
+        }
+
+        public PingReply(int id, long sendTime, string ep)
+        {
+            this.id = id;
+            this.sendTime = sendTime;
+            this.ep = ep;
+        }
 
         public int GetID()
         {

@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Reflection;
-using DarkTunnel.Common.Messages;
 
 //This class is currently not thread safe.
 
@@ -29,17 +27,14 @@ namespace DarkTunnel.Common
             using (MemoryStream ms = new MemoryStream(buildBytes))
             {
                 using (BinaryWriter bw = new BinaryWriter(ms, System.Text.Encoding.UTF8, true))
-                {
                     message.Serialize(bw);
-                }
+
                 short type = (short)t2mt[message.GetType()];
                 short length = (short)ms.Position;
                 BitConverter.GetBytes(type).CopyTo(sendBytes, 4);
                 BitConverter.GetBytes(length).CopyTo(sendBytes, 6);
                 if (length > 0)
-                {
                     Array.Copy(buildBytes, 0, sendBytes, 8, length);
-                }
             }
             return sendBytes;
         }
@@ -52,26 +47,19 @@ namespace DarkTunnel.Common
                 Load();
             }
             if (br.ReadByte() != 'D' || br.ReadByte() != 'T' || br.ReadByte() != '0' || br.ReadByte() != '1')
-            {
                 return null;
-            }
+
             short type = br.ReadInt16();
             short length = br.ReadInt16();
 
-            if (!Enum.IsDefined(typeof(MessageType), (int)type))
-            {
+            if (!Enum.IsDefined(typeof(MessageType), (int)type) || (length != br.BaseStream.Length - 8))
                 return null;
-            }
-            if (length != br.BaseStream.Length - 8)
-            {
-                return null;
-            }
+
             Type messageType = mt2t[(MessageType)type];
             IMessage message = (IMessage)Activator.CreateInstance(messageType);
             if (length > 0)
-            {
                 message.Deserialize(br);
-            }
+
             return message;
         }
 
@@ -82,16 +70,15 @@ namespace DarkTunnel.Common
             sendBytes[1] = (byte)'T';
             sendBytes[2] = (byte)'0';
             sendBytes[3] = (byte)'1';
-            
+
             //Find all message types
             foreach (Type t in Assembly.GetExecutingAssembly().GetExportedTypes())
             {
                 MessageTypeAttribute mta = t.GetCustomAttribute<MessageTypeAttribute>();
-                if (mta != null)
-                {
-                    t2mt[t] = mta.type;
-                    mt2t[mta.type] = t;
-                }
+                if (mta == null)
+                    continue;
+                t2mt[t] = mta.type;
+                mt2t[mta.type] = t;
             }
         }
     }
