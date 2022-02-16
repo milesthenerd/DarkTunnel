@@ -22,7 +22,7 @@ mode=client
 endpoint=serverhost.address.example.com:26702
 
 #mediationIP: The public IP and port of the mediation server you are connecting to.
-mediationIP=150.136.166.80:6510
+mediationIP=sync.milesthenerd.net:6510
 
 #remoteIP, clients: The public IP of the peer you want to connect to.
 remoteIP=127.0.0.1
