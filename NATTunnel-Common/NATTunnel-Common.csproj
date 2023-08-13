@@ -5,6 +5,7 @@
     <RollForward>LatestMajor</RollForward>
     <RootNamespace>NATTunnel.Common</RootNamespace>
     <LangVersion>10</LangVersion>
+    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
 </Project>

@@ -61,8 +61,8 @@ public static class Tunnel
 
         aes = new AesGcm(symmetricKey);
 
-        capture = new FrameCapture();
-        capture.Start();
+        //capture = new FrameCapture();
+        //capture.Start();
 
         udpClient = new UdpClient();
 
@@ -675,19 +675,12 @@ public static class Tunnel
                     {
                         Console.WriteLine(receivedMessage.NATType);
                         natType = receivedMessage.NATType;
-                        if (isServer)
-                        {
-                            UdpServer();
-                        }
-                        else
-                        {
-                            UdpClient();
-                            MediationMessage message = new MediationMessage(MediationMessageType.ConnectionRequest);
-                            message.SetEndpoint(new IPEndPoint(remoteIp, IPEndPoint.MinPort));
-                            message.NATType = natType;
-                            byte[] sendBuffer = Encoding.ASCII.GetBytes(message.Serialize());
-                            tcpClientStream.Write(sendBuffer, 0, sendBuffer.Length);
-                        }
+                        Console.WriteLine("Press any key to quit");
+                        tcpClientStream.Close();
+                        tcpClientTaskCancellationToken.Cancel();
+                        tcpClient.Close();
+                        tcpClientTaskCancellationToken.Dispose();
+
                     }
                     break;
                     case MediationMessageType.ConnectionBegin:
